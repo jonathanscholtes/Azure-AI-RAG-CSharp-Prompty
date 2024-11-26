@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Azure CDN Endpoint Not Serving Updated Content</title>
+</head>
+<body>
+
+<h1>Azure CDN Endpoint Not Serving Updated Content</h1>
+
+<h2>Description:</h2>
+<p>Azure CDN endpoints may not serve updated content due to caching policies or propagation delays. This can result in users seeing outdated versions of your website or application. It is important to understand and review the caching rules and settings for your CDN endpoint to ensure that updated content is being served to your users in a timely manner. Additionally, propagation delays can occur when changes are made to your CDN configuration, and it may take some time for these changes to be fully implemented across all CDN edge servers.</p>
+<p>Reviewing caching rules and triggering purges often resolves this issue. By properly configuring caching rules and purging the cache when necessary, you can ensure that your users are always seeing the most up-to-date content from your CDN endpoint.</p>
+
+<h2>Possible Error Messages:</h2>
+<p>- "404 Not Found: The requested resource could not be found on the server."</p>
+<p>- "502 Bad Gateway: The server received an invalid response from an upstream server."</p>
+<p>- "503 Service Unavailable: The server is currently unable to handle the request due to a temporary overload or maintenance."</p>
+
+<h2>Resolution Steps:</h2>
+<ol>
+  <li>Review your CDN caching rules and ensure that the appropriate cache-control headers are being set for your content. This will help determine how long content is cached before it is considered stale.</li>
+  <li>Consider setting a shorter cache duration for frequently updated content. This will reduce the likelihood of users seeing outdated versions of your content.</li>
+  <li>If you have made recent changes to your CDN configuration, allow some time for propagation to occur. Propagation delays can vary depending on the CDN provider and the number of edge servers involved.</li>
+  <li>If you need to serve updated content immediately, trigger a cache purge for the specific files or directories that have been updated. This will force the CDN to fetch the latest version of the content from your origin server.</li>
+  <li>Monitor the CDN logs and performance metrics to identify any potential issues or bottlenecks that may be affecting the delivery of updated content. This will help you troubleshoot and optimize your CDN configuration.</li>
+</ol>
+
+<h2>Next Steps:</h2>
+<p>If the issue persists after following the resolution steps, consider reaching out to your CDN provider's support team for further assistance. They will be able to provide specific guidance and troubleshooting steps based on your CDN configuration and setup.</p>
+
+<h2>Reference Code:</h2>
+<p>AZCDN13</p>
+
+</body>
+</html>

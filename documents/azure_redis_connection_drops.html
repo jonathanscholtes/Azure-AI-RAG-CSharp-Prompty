@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Azure Redis Cache Connection Drops</title>
+</head>
+<body>
+
+<h1>Azure Redis Cache Connection Drops</h1>
+
+<h2>Description:</h2>
+<p>Connection drops with Azure Redis Cache can result from exceeding connection limits, network issues, or timeouts. It is important to properly configure and monitor your Azure Redis Cache to ensure stable connectivity.</p>
+<p>Azure Redis Cache is a distributed, in-memory cache that provides high-performance and low-latency data access. It is commonly used to improve the performance and scalability of applications by caching frequently accessed data. However, if not properly managed, connection drops can occur, impacting the availability and performance of your application.</p>
+
+<h2>Possible Error Messages:</h2>
+<p>- "Connection refused"</p>
+<p>- "Timeout error"</p>
+<p>- "Exceeded maximum number of connections"</p>
+
+<h2>Resolution Steps:</h2>
+<ol>
+  <li>Check the Azure Redis Cache configuration to ensure that the maximum number of connections is not exceeded. If necessary, increase the connection limit to accommodate the expected workload.</li>
+  <li>Review the network configuration and firewall settings to ensure that there are no restrictions or blocking rules that could cause connection drops.</li>
+  <li>Monitor the network latency between your application and the Azure Redis Cache. High latency can lead to timeouts and connection drops. Consider optimizing the network infrastructure or using a different Azure region for better connectivity.</li>
+  <li>Implement retry logic in your application to handle transient connection drops. This can help recover from temporary network issues and prevent application failures.</li>
+  <li>Regularly monitor the Azure Redis Cache metrics and logs to identify any patterns or trends that could indicate potential connection drop issues. Use Azure Monitor or other monitoring tools to set up alerts and notifications for proactive troubleshooting.</li>
+</ol>
+
+<h2>Next Steps:</h2>
+<p>If the connection drops persist after following the resolution steps, consider reaching out to Azure support for further assistance. They can help investigate the issue and provide guidance specific to your Azure Redis Cache deployment.</p>
+
+<h2>Reference Code:</h2>
+<p>AZRED17</p>
+
+</body>
+</html>

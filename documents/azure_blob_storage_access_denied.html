@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Azure Blob Storage Access Denied</title>
+</head>
+<body>
+
+<h1>Azure Blob Storage Access Denied</h1>
+
+<h2>Description:</h2>
+<p>Accessing Azure Blob Storage may fail due to incorrect permissions, invalid SAS tokens, or missing authentication credentials. This can result in an "Access Denied" error message. Resolving this issue involves ensuring that the user or application has appropriate access rights to the Blob Storage account. It is important to check the permissions, SAS tokens, and authentication credentials to ensure they are correctly configured.</p>
+
+<h2>Possible Error Messages:</h2>
+<ul>
+  <li>"Access Denied"</li>
+  <li>"Permission Denied"</li>
+  <li>"Invalid SAS Token"</li>
+  <li>"Authentication Failed"</li>
+</ul>
+
+<h2>Resolution Steps:</h2>
+<ol>
+  <li>Verify the permissions assigned to the user or application accessing the Blob Storage. Ensure that the necessary permissions are granted, such as read, write, or delete access.</li>
+  <li>Check the SAS token used for authentication. Make sure it is valid and has not expired. Generate a new SAS token if needed.</li>
+  <li>Ensure that the authentication credentials, such as the account name and account key, are correctly entered. Double-check for any typos or mistakes.</li>
+  <li>If using Azure Active Directory (AAD) authentication, verify that the user or application has the necessary permissions and roles assigned in AAD.</li>
+  <li>If the issue persists, check the firewall and virtual network settings for the Blob Storage account. Ensure that the necessary IP addresses or ranges are allowed to access the storage.</li>
+</ol>
+
+<h2>Next Steps:</h2>
+<p>If the above resolution steps do not resolve the issue, consider reaching out to Azure support for further assistance. They can provide more specific guidance based on your specific scenario and help troubleshoot any underlying issues.</p>
+
+<h2>Reference Code:</h2>
+<p>AZBLOB5</p>
+
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Azure Monitor Alert Not Triggering</title>
+</head>
+<body>
+
+<h1>Azure Monitor Alert Not Triggering</h1>
+
+<h2>Description:</h2>
+<p>Azure Monitor alerts may not trigger due to incorrect alert rule configurations, metric thresholds, or missing telemetry data. Troubleshooting involves reviewing alert settings and ensuring data ingestion.</p>
+<p>When Azure Monitor alerts fail to trigger, it can result in missed notifications for critical events or issues within your Azure resources. This can lead to delays in identifying and resolving problems, impacting the overall performance and availability of your applications and services.</p>
+
+<h2>Possible Error Messages:</h2>
+<p>1. "No data found for the specified metric."</p>
+<p>2. "Alert rule configuration is invalid."</p>
+<p>3. "Threshold value is not set correctly."</p>
+<p>4. "Data ingestion is not enabled for the specified resource."</p>
+<p>5. "Insufficient permissions to create or manage alerts."</p>
+
+<h2>Resolution Steps:</h2>
+<ol>
+  <li>Verify that the alert rule configuration is correct. Ensure that the target resource, condition, and action group are properly defined. Review the alert rule settings and make any necessary adjustments.</li>
+  <li>Check the metric thresholds. Ensure that the threshold values are set appropriately to trigger the alert when the desired condition is met. Adjust the thresholds if needed.</li>
+  <li>Confirm that data ingestion is enabled for the resource. Check if the required diagnostic settings are configured to send telemetry data to Azure Monitor. Enable data ingestion if it is disabled.</li>
+  <li>Review the time range and frequency settings. Ensure that the alert evaluation window and frequency match your monitoring requirements. Adjust these settings if necessary.</li>
+  <li>Check the permissions for creating and managing alerts. Ensure that the user or service principal has the necessary permissions to create and manage alerts. Grant the required permissions if needed.</li>
+</ol>
+
+<h2>Next Steps:</h2>
+<p>If the above resolution steps do not resolve the issue, consider the following next steps:</p>
+<ul>
+  <li>Check the Azure Monitor service health status for any ongoing issues or outages that may affect alert triggering.</li>
+  <li>Review the Azure Monitor documentation and community forums for additional troubleshooting guidance and best practices.</li>
+  <li>Contact Azure support for further assistance, providing them with the reference code "AZMON10" to help expedite the troubleshooting process.</li>
+</ul>
+
+<h2>Reference Code:</h2>
+<p>AZMON10</p>
+
+</body>
+</html>

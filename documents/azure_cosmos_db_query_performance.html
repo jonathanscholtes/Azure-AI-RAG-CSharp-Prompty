@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Azure Cosmos DB Query Performance Issues</title>
+</head>
+<body>
+
+<h1>Azure Cosmos DB Query Performance Issues</h1>
+
+<h2>Description:</h2>
+<p>Performance issues in Azure Cosmos DB queries may occur due to inefficient query design, indexing problems, or insufficient request units (RUs). These issues can lead to slow query execution times and poor overall performance. To address these problems, it is important to optimize queries and configure the database properly. By doing so, you can significantly enhance the performance of your Azure Cosmos DB queries.</p>
+
+<p>One common cause of performance issues is inefficient query design. Poorly written queries can result in unnecessary resource consumption and increased latency. Another factor that can impact performance is indexing problems. If the appropriate indexes are not created or maintained, queries may have to scan through a large number of documents, leading to slower execution times. Lastly, insufficient request units (RUs) can also cause performance problems. RUs determine the throughput capacity of your Azure Cosmos DB account, and if not allocated properly, queries may not have enough resources to execute efficiently.</p>
+
+<h2>Possible Error Messages:</h2>
+<ul>
+  <li>Error: "Request rate is large. More Request Units may be needed."</li>
+  <li>Error: "Query took too long to execute."</li>
+  <li>Error: "No index found for the query."</li>
+  <li>Error: "Request rate is too high."</li>
+</ul>
+
+<h2>Resolution Steps:</h2>
+<ol>
+  <li>Review and optimize your query design. Ensure that your queries are written efficiently and avoid unnecessary operations or redundant filters. Use the appropriate query operators and functions to minimize resource consumption.</li>
+  <li>Check and create necessary indexes. Analyze your query patterns and create indexes on the properties used in your queries. This will help improve query performance by reducing the number of documents that need to be scanned.</li>
+  <li>Monitor and adjust request units (RUs). Use Azure Cosmos DB's built-in monitoring tools to analyze the RU consumption of your queries. If you consistently encounter performance issues, consider increasing the allocated RUs to provide more resources for query execution.</li>
+  <li>Consider using partitioning. If your data is partitioned, distribute the workload across multiple partitions to improve query performance. This can be achieved by selecting appropriate partition keys and distributing the data evenly.</li>
+  <li>Regularly review and optimize your database configuration. Keep track of the performance metrics and fine-tune the configuration settings accordingly. This may include adjusting indexing policies, enabling automatic indexing, or increasing the provisioned throughput.</li>
+</ol>
+
+<h2>Next Steps:</h2>
+<p>After implementing the resolution steps mentioned above, monitor the performance of your Azure Cosmos DB queries. Use the monitoring tools provided by Azure Cosmos DB to analyze query execution times, RU consumption, and overall performance. If you still encounter performance issues, consider reaching out to Azure support for further assistance.</p>
+
+<h2>Reference Code: AZCOS3</h2>
+
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Azure Load Balancer Backend Pool Health Probes Failing</title>
+</head>
+<body>
+
+<h1>Azure Load Balancer Backend Pool Health Probes Failing</h1>
+
+<h2>Description:</h2>
+<p>Backend pool health probes for Azure Load Balancer may fail due to incorrect probe configurations, misaligned application endpoints, or service unavailability. This can result in degraded performance or service disruptions. It is important to ensure probe accuracy and application responsiveness to resolve this issue.</p>
+<p>Incorrect probe configurations can lead to false positives or false negatives, causing the load balancer to mark healthy instances as unhealthy or vice versa. Misaligned application endpoints can result in the load balancer sending probes to incorrect endpoints, leading to failed health checks. Additionally, if the service itself is unavailable or experiencing issues, the health probes will naturally fail.</p>
+
+<h2>Possible Error Messages:</h2>
+<ul>
+  <li>Health probe failed</li>
+  <li>Backend pool unhealthy</li>
+  <li>Probe timeout</li>
+</ul>
+
+<h2>Resolution Steps:</h2>
+<ol>
+  <li>Review and verify the probe configurations. Ensure that the probe settings, such as the probe protocol, port, and interval, are correctly configured. Make sure the probe target matches the actual endpoint of the application.</li>
+  <li>Check the health of the application endpoints. Verify that the application endpoints are correctly aligned with the load balancer's probe settings. Ensure that the endpoints are responsive and functioning properly.</li>
+  <li>Inspect the network connectivity. Check if there are any network issues or firewall rules blocking the probes. Ensure that the load balancer can establish a connection with the application endpoints.</li>
+  <li>Monitor the service availability. If the backend service is experiencing issues or is temporarily unavailable, the health probes will naturally fail. Investigate and resolve any service-related problems.</li>
+  <li>Consider adjusting the probe settings. If the issue persists, you may need to fine-tune the probe settings, such as increasing the probe timeout or adjusting the probe interval, to better suit your application's requirements.</li>
+</ol>
+
+<h2>Next Steps:</h2>
+<p>After following the resolution steps mentioned above, retest the health probes to ensure they are functioning correctly. Monitor the load balancer and application endpoints for any further issues. If the problem persists, consider reaching out to Azure support for further assistance.</p>
+
+<h2>Reference Code: AZLB12</h2>
+
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Azure Application Gateway 502 Errors</title>
+</head>
+<body>
+<h1>Azure Application Gateway 502 Errors</h1>
+
+<h2>Description:</h2>
+<p>A 502 Bad Gateway error in Azure Application Gateway usually indicates backend server unavailability or misconfiguration. This error occurs when the gateway is unable to establish a connection to the backend server to fulfill the client's request. Diagnosing this issue requires reviewing the health of the backend servers and checking the configuration settings of the gateway.</p>
+
+<h2>Possible Error Messages:</h2>
+<p>- "502 Bad Gateway"</p>
+<p>- "The server returned an invalid or incomplete response."</p>
+<p>- "Error: 502 - Web server received an invalid response while acting as a gateway or proxy server."</p>
+
+<h2>Resolution Steps:</h2>
+<ol>
+  <li>Check the health of the backend servers by navigating to the Azure portal and accessing the Application Gateway resource. Review the backend health status and ensure that all backend servers are healthy and responding properly.</li>
+  <li>Verify the backend server settings, such as the IP address, port, and protocol, to ensure they are correctly configured in the Application Gateway. Make any necessary adjustments if there are discrepancies.</li>
+  <li>Review the Application Gateway logs to identify any specific errors or warnings related to the 502 error. This can provide additional insights into the root cause of the issue.</li>
+  <li>If the backend servers are hosted in a virtual network, check the network security group (NSG) rules to ensure that they allow traffic from the Application Gateway to reach the backend servers.</li>
+  <li>Consider scaling up the backend servers or increasing their capacity if they are experiencing high traffic or resource limitations. This can help prevent server unavailability and improve the overall performance of the Application Gateway.</li>
+</ol>
+
+<h2>Next Steps:</h2>
+<p>If the above resolution steps do not resolve the issue, consider reaching out to Azure support for further assistance. Provide them with the reference code "AZAG10" to help them quickly identify and troubleshoot the problem.</p>
+
+<h2>Reference Code:</h2>
+<p>AZAG10</p>
+
+</body>
+</html>

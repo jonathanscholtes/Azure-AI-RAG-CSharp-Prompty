@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Azure SQL Database Connection Timeout</title>
+</head>
+<body>
+<h1>Azure SQL Database Connection Timeout</h1>
+
+<h2>Description:</h2>
+<p>Users often experience connection timeouts when attempting to connect to an Azure SQL Database. This issue may arise due to incorrect connection strings, firewall settings, or network configuration. Identifying and resolving the root cause is crucial to restoring connectivity.</p>
+<p>Connection timeouts can occur when there is a delay in establishing a connection between the client application and the Azure SQL Database. This can be caused by various factors such as network congestion, high server load, or misconfiguration of the connection settings. It is important to troubleshoot and resolve these issues promptly to ensure uninterrupted access to the database.</p>
+
+<h2>Possible Error Messages:</h2>
+<ul>
+  <li>"Timeout expired. The timeout period elapsed prior to completion of the operation."</li>
+  <li>"A network-related or instance-specific error occurred while establishing a connection to SQL Server."</li>
+  <li>"Cannot open server 'yourservername' requested by the login."</li>
+</ul>
+
+<h2>Resolution Steps:</h2>
+<ol>
+  <li>Check the connection string: Ensure that the connection string used to connect to the Azure SQL Database is correct. Verify the server name, database name, username, and password. Make sure there are no typos or missing information.</li>
+  <li>Review firewall settings: Check if the firewall settings for the Azure SQL Database allow incoming connections from the client application. Ensure that the client's IP address is added to the firewall rules. If necessary, modify the firewall settings to allow the connection.</li>
+  <li>Verify network configuration: Ensure that the network configuration of the client application allows communication with the Azure SQL Database. Check if there are any network restrictions or firewalls blocking the connection. Contact the network administrator if needed.</li>
+  <li>Check server load: If the Azure SQL Database is experiencing high server load, it may result in connection timeouts. Monitor the server's performance and consider scaling up or optimizing the database to handle the workload efficiently.</li>
+  <li>Test connectivity from different locations: Try connecting to the Azure SQL Database from a different network or location to determine if the issue is specific to the current network. This can help identify any network-related issues that may be causing the timeouts.</li>
+</ol>
+
+<h2>Next Steps:</h2>
+<p>If the above resolution steps do not resolve the connection timeout issue, it is recommended to seek further assistance from Azure support or consult the Azure SQL Database documentation for additional troubleshooting steps.</p>
+
+<h2>Reference Code: AZSQL1</h2>
+
+</body>
+</html>
