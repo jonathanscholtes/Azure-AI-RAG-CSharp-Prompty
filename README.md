@@ -3,27 +3,22 @@
 > Updates and modifications are being made frequently, which may impact stability or functionality. This notice will be removed once development is complete and the project reaches a stable release.
 
 
-# Designing a Robust and Secure GenAI RAG Architecture with React, Python FastAPI, and Azure
+# Robust GenAI Chat Solution with .NET, Semantic Kernel, Python, and and Prompty  
 
 ## Overview
 
-This project provides a guide to operationalizing a Generative AI (GenAI) solution on Azure using a Retrieval-Augmented Generation (RAG) architecture. It leverages Azure components like CosmosDB for vector storage, Azure OpenAI for model inference, and integrates a full-stack setup with React and Python. Built with a focus on security, scalability, and user experience, this solution follows best practices for deploying RAG workflows on Azure.
-
-Automated deployment is managed via Bicep templates and Azure CLI, ensuring a consistent and repeatable infrastructure setup. Building on [LangChain RAG with React, FastAPI, and Cosmos DB Vector](https://stochasticcoder.com/2024/02/27/langchain-rag-with-react-fastapi-cosmos-db-vector-part-1/), it adds Azure OpenAI, enhanced logging, networking, and security configurations for an enterprise-ready GenAI solution that handles secure data, efficient retrieval, and seamless user interactions in real-world applications.
-
+This project provides a guide to operationalizing a Generative AI (GenAI) solution on Azure using a Retrieval-Augmented Generation (RAG) architecture. It leverages Azure components like Azure AI Search for vector storage, Azure OpenAI for model inference, and integrates a .NET for API. Built with a focus on security, scalability, and user experience, this solution follows best practices for deploying RAG workflows on Azure.
 
 
 ## Key Features
 
 - **RAG Architecture**: Implements a Retrieval-Augmented Generation workflow, enhancing GenAI capabilities with a vectorized retrieval layer for contextually relevant responses.
-- **CosmosDB Vector Store**: Utilizes CosmosDB for scalable and efficient storage of embeddings, supporting fast and reliable retrieval of data relevant to user queries.
+- **Azure  AI Search Vector Store**: Utilizes Azure AI Search for scalable and efficient storage of embeddings, supporting fast and reliable retrieval of data relevant to user queries.
+- **Azure Cosmos DB Document Store**: Utilize Azure Cosmos DB to store and provide additional contect to the GenAI Chat application.
 - **Azure OpenAI**: Integrates OpenAI models to enable high-quality generative responses and insights.
      - Implements the LangChain with Azure OpenAI Server.
-- **React Frontend**: Provides an interactive and responsive user interface for a seamless experience.
-    - Integrates Node.js for server-side logic and connecting to the FastAPI backend.
-   
-    - Display documents retrieved through Azure AI Search's similarity search.
-- **Python Backend**: Manages server-side processing, API orchestration, and integration with Azure services.
+
+- **.Net Backend**: Manages server-side processing, API orchestration, and integration with Azure services.
 - **Event Driven Document Processing**: Use Azure Functions to create vector embeddings in Azure Cosmos DB for MongoDB VCore, triggered by document uploads.
 - **Infrastructure as Code**: Uses Bicep and Azure CLI to deploy, manage, and scale resources consistently and securely across environments.
 
@@ -32,16 +27,15 @@ Automated deployment is managed via Bicep templates and Azure CLI, ensuring a co
 
 The architecture of this project includes:
 
-- **Frontend**: The user interface is developed using React, ensuring a responsive and interactive experience. This allows users to engage with the application intuitively, providing real-time feedback and dynamic content updates.
-- **Backend**: The backend is implemented in Python, utilizing FastAPI for efficient handling of AI logic and data processing. Azure Functions are employed to manage event-driven functions, allowing for scalable and responsive execution as user interactions occur.
-- **Database**: Azure Cosmos DB for MongoDB VCore serves as the database solution, optimized for vector search capabilities. This enables fast and efficient retrieval of data, facilitating the application's AI functionalities.
+
+- **Backend**: The backend is implemented in .Net, utilizing controller-based API for efficient handling of AI logic and data processing. Azure Functions are employed to manage event-driven functions, allowing for scalable and responsive execution as user interactions occur.
+- **Database**: Azure Cosmos DB serves as the database solution, with Azure AI Search optimized for vector search capabilities. This enables fast and efficient retrieval of data, facilitating the application's AI functionalities.
 - **AI Models**: The project incorporates the Azure OpenAI Service, which provides advanced generative text and embedding models. These models enhance the application’s ability to produce high-quality, contextually relevant responses based on user input.
 
 ## Requirements
 - Azure subscription for deploying Azure GenAI RAG Application.
 - [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/get-started-with-azure-cli) (Command Line Interface)
-- Node.js 20.11.1 installed in your development environment.
-    - Please follow the steps outlined [here](https://stochasticcoder.com/2024/03/06/langchain-rag-with-react-fastapi-cosmos-db-vectors-part-3/#h-install-node-js) to download and install Node.JS.
+- .NET 8.0 is installed and properly configured in the development environment.
 - Python 3.11.4 installed on development environment.
 - An IDE for Development, such as [VS Code](https://code.visualstudio.com/download)
 
@@ -62,35 +56,26 @@ cd Azure-AI-RAG-Architecture-React-FastAPI-and-Cosmos-DB-Vector-Store
 Navigate to the deployment directory:
 
 ```bash
-cd deploy
+cd infra
 ```
 
-Then, use the following PowerShell command to deploy the solution. Make sure to replace the placeholders with your actual subscription name, Azure Region (ResourceGroupLocation), CosmosDB for MongoDB vCore username, and password:
+Then, use the following PowerShell command to deploy the solution. Make sure to replace the placeholders with your actual subscription name, Azure Region (location)
 
 **PowerShell**
 ```bash
-.\deploy.ps1 -Subscription '[Subscription Name]' -ResourceGroupLocation 'southcentralus' -CosmosadminUsername '[Username to create for CosmosDB]' -CosmosadminPassword '[Password to Create for CosmosDB]'
+.\deploy.ps1 -Subscription '[Subscription Name]' -Location 'southcentralus'
 ```
 
 This script will provision the necessary resources in your Azure subscription according to the specified parameters. The deployment may take upto **30 minutes** to provision all Azure resources.
 
-### 3. Configure Storage Account Access:  
-After deployment, it's essential to allow access to the Storage Account facilitate document uploads for embedding creation. To do this, you will need to add your client IP address to the Storage Account’s firewall settings. This ensures that your local environment can communicate with the Azure services properly.
 
-- Log in to the Azure portal.
-- Navigate to your Storage Account.
-- Under the **Networking** section, locate the **Firewall and virtual networks** settings.
-- Add your current client IP address to the list of allowed addresses.
+### 3. Upload Documents for Azure AI Search Indexing:
 
-![storage network](./images/storage_network.png)
+Upload the HTML files from the [documents](documents) directory to the **load** container of the Azure Storage Account.
 
-### 4. Upload Documents for Embedding Creation:
+![storage network](./media/storage_container_load.png)
 
-Upload the JSON files from the [documents](documents) directory to the **load** container of the Azure Storage Account.
-
-![storage network](./images/storage_load_container.png)
-
-### 5. Validate Embedding Load in Azure CosmosDB for MongoDB vCore
+### 4. Validate Embedding Load in Azure CosmosDB for MongoDB vCore
 To verify the successful loading of the documents, use [MongoDB Compass](https://www.mongodb.com/products/tools/compass) or a similar tool.
 
 ##### Configure Azure CosmosDB for MongoDB vCore Access:

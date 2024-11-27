@@ -61,5 +61,31 @@ resource account 'Microsoft.DocumentDB/databaseAccounts@2023-04-15' = {
   }
 }
 
+var roleDefinitionId = guid('sql-role-definition-', account.id)
+
+resource cosmosDbRoleDefinition 'Microsoft.DocumentDB/databaseAccounts/sqlRoleDefinitions@2021-07-01-preview' = {
+  name: roleDefinitionId
+  parent: account  
+  properties: {
+    roleName: 'My Read Write Role'
+    type: 'CustomRole'
+    assignableScopes: [
+      account.id
+    ]
+    permissions:[
+      {
+    dataActions: [
+      
+      'Microsoft.DocumentDB/databaseAccounts/readMetadata'
+      'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers/items/read'
+      'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers/executeQuery'
+      'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers/readChangeFeed'
+    ]
+    
+  }  
+  ]
+  }
+}
+
 output endpoint string = account.properties.documentEndpoint
 output name string = account.name

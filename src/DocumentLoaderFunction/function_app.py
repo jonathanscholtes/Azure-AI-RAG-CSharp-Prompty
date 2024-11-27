@@ -124,7 +124,7 @@ class AISearchIndexLoader:
         if not index_exists:
 
             semantic_config =SemanticConfiguration(
-                           name="my-semantic-config",
+                           name="default",
                             prioritized_fields=SemanticPrioritizedFields(
                                title_field=SemanticField(field_name="title"),
                                content_fields=[SemanticField(field_name="content")]
