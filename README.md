@@ -27,7 +27,7 @@ This repository provides a guide to operationalizing a Generative AI (GenAI) sol
 
 ## Architecture  
 
-![System Architecture Diagram](./images/design1.png)  
+![System Architecture Diagram](./media/design1.png)  
 
 ### Components Overview  
 
