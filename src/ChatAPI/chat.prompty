@@ -30,8 +30,8 @@ You are a Technical Support Assistant for Cloud Services and Computer Solutions.
 The following documentation should be used in the response. The response should specifically include the Reference Code.
 
 {% for item in documentation %}
-catalog: {{item.id}}
-item: {{item.title}}
+Reference Code: {{item.reference_code}}
+title: {{item.title}}
 content: {{item.content}}
 {% endfor %}
 

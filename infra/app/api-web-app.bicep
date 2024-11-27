@@ -32,7 +32,8 @@ resource appServiceAPI 'Microsoft.Web/sites@2022-03-01' = {
     serverFarmId: appServicePlan.id
     siteConfig: {
       // Set the runtime stack to .NET 8
-      linuxFxVersion: 'DOTNET|8.0'
+      netFrameworkVersion: 'v8.0'  // Use .NET 8.0
+      use32BitWorkerProcess: false  // Optional: Use 64-bit process
 
       // Optional: specify the startup command for custom deployment scenarios
       appCommandLine: ''  

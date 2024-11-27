@@ -19,10 +19,10 @@ public sealed class CustomerData(CosmosClient cosmosClient, ILogger<CustomerData
             var customer = response.Resource;
 
             // Limit orders to the first 2 items
-            if (customer.TryGetValue("orders", out object? orders) && orders is List<object> list)
-            {
-                customer["orders"] = list.Take(2).ToList();
-            }
+            //if (customer.TryGetValue("orders", out object? orders) && orders is List<object> list)
+            //{
+            //    customer["orders"] = list.Take(2).ToList();
+            //}
 
             return customer;
         }

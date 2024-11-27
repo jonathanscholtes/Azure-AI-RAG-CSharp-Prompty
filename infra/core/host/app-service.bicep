@@ -1,5 +1,6 @@
 param name string
 param location string
+param linuxMachine bool
 
 resource appServicePlan 'Microsoft.Web/serverfarms@2022-03-01' = {
   name: name
@@ -12,7 +13,7 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2022-03-01' = {
     capacity: 1
   }
   properties: {
-    reserved: true
+    reserved: linuxMachine
     isXenon: false
     hyperV: false
   }

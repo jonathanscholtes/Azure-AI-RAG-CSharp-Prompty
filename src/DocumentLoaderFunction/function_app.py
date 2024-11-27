@@ -16,11 +16,11 @@ from azure.search.documents.indexes.models import (
     SearchField,
     SemanticConfiguration,
     SemanticField,
-    HnswParameters,
-    VectorSearchAlgorithmConfiguration,
     VectorSearch,
     VectorSearchProfile,
-    SemanticPrioritizedFields
+    SemanticPrioritizedFields,
+    HnswAlgorithmConfiguration,
+    SemanticSearch
 )
 from azure.core.exceptions import ResourceNotFoundError
 from langchain_openai import AzureOpenAIEmbeddings
@@ -106,40 +106,46 @@ class AISearchIndexLoader:
             index_response = self.search_index_client.get_index(self.index_name)
             index_exists = True
 
-            search_results = self.search_client.search(search_text="*", top=1, include_total_count=True)
-            if search_results.get_count() > 0:
-                self.logger.info("AI Search index already exists and contains documents. Nothing to do.")
-                return
+            #search_results = self.search_client.search(search_text="*", top=1, include_total_count=True)
+            #if search_results.get_count() > 0:
+            #    self.logger.info("AI Search index already exists and contains documents. Nothing to do.")
+            #   return
         except ResourceNotFoundError:
             self.logger.info("AI Search index not found, creating index...")
 
         # Create the index if it doesn't exist
+        #semantic_settings=SemanticConfiguration(
+                #            name="default",
+                #            prioritized_fields=SemanticPrioritizedFields(
+                #                title_field=SemanticField(field_name="title"),
+                #                content_fields=[SemanticField(field_name="content")]
+                #            )                        
+                #),
         if not index_exists:
+
+            semantic_config =SemanticConfiguration(
+                           name="my-semantic-config",
+                            prioritized_fields=SemanticPrioritizedFields(
+                               title_field=SemanticField(field_name="title"),
+                               content_fields=[SemanticField(field_name="content")]
+                           ))
+
             index = SearchIndex(
                 name=self.index_name,
                 fields=[
-                    SimpleField(name="ref_code", type="Edm.String", key=True, filterable=True, sortable=True),
+                    SimpleField(name="reference_code", type="Edm.String", key=True, filterable=True, sortable=True),
                     SearchableField(name="content", type="Edm.String", filterable=True, sortable=True),
                     SearchableField(name="title", type="Edm.String", filterable=True, sortable=True),
-                    SearchField(name="contentVector", type="Collection(Edm.Single)", vector_search_dimensions=1536, vector_search_profile_name="myHnswProfile")
+                    SearchField(name="contentVector", type="Collection(Edm.Single)", vector_search_dimensions=1536, vector_search_profile_name="my-vector-config")
                 ],
-                semantic_settings=SemanticConfiguration(
-                            name="default",
-                            prioritized_fields=SemanticPrioritizedFields(
-                                title_field=SemanticField(field_name="title"),
-                                content_fields=[SemanticField(field_name="content")]
-                            )                        
-                ),
-                vector_search=VectorSearch(
-                    algorithms=[
-                        HnswParameters(name="myHnsw"),
-                        HnswParameters(name="myExhaustiveKnn")
-                    ],
-                    profiles=[
-                        VectorSearchProfile(name="myHnswProfile", algorithm_configuration_name="myHnsw"),
-                        VectorSearchProfile(name="myExhaustiveKnnProfile", algorithm_configuration_name="myExhaustiveKnn")
-                    ]
-                )
+                
+                semantic_search= SemanticSearch(configurations=[semantic_config]),
+               
+                vector_search = VectorSearch(
+                        profiles=[VectorSearchProfile(name="my-vector-config", algorithm_configuration_name="my-algorithms-config")],
+                        algorithms=[HnswAlgorithmConfiguration(name="my-algorithms-config", kind="hnsw")],
+                    )
+
             )
             self.search_index_client.create_index(index)
 
@@ -159,15 +165,13 @@ class AISearchIndexLoader:
                 "contentVector": embedding
             })
 
-            # Index the documents
-            actions = [{"actionType": "upload", "document": doc} for doc in documents]
-            self.search_client.upload_documents(documents=actions)
+            result = self.search_client.upload_documents(documents=documents)
+
+            self.logger.info("Upload of new document succeeded: {}".format(result[0].succeeded))
+
 
         except Exception as ex:
             self.logger.error("Error in AI Search: %s", ex)
-
-
-
 
 
 

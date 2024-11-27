@@ -18,6 +18,9 @@ param location string
 var resourceToken = uniqueString(environmentName,location,az.subscription().subscriptionId)
 var abbreviations = loadJsonContent('abbreviations.json')
 
+
+var apiAppName = 'api-${projectName}-${environmentName}-${resourceToken}'
+
 resource resourceGroup 'Microsoft.Resources/resourceGroups@2024-03-01' = {
   name: 'rg-${projectName}-${environmentName}-${location}-${resourceToken}'
   location: location
@@ -93,12 +96,13 @@ module monitoring 'core/monitor/monitoring.bicep' = {
 }
 
 
-module appServicePlan 'core/host/app-service.bicep' = {
-  name: 'appServicePlan'
+module appServicePlanLinux 'core/host/app-service.bicep' = {
+  name: 'appServicePlanLinux'
   scope: resourceGroup
   params: {
     location:location
-    name:  'asp-${projectName}-${environmentName}-${resourceToken}'
+    name:  'asp-lnx-${projectName}-${environmentName}-${resourceToken}'
+    linuxMachine: true
   }
 }
 
@@ -106,7 +110,7 @@ module loaderFunction 'app/loader-function.bicep' = {
   name: 'loaderFunction'
   scope: resourceGroup
   params: {
-    appServicePlanName: appServicePlan.outputs.appServicePlanName
+    appServicePlanName: appServicePlanLinux.outputs.appServicePlanName
     functionAppName: 'func-loader-${resourceToken}'
     location: location
     StorageBlobURL:storage.outputs.storageBlobURL
@@ -117,15 +121,26 @@ module loaderFunction 'app/loader-function.bicep' = {
     identityName: managedIdentity.outputs.managedIdentityName
     AZURE_AI_SEARCH_ENDPOINT: search.outputs.endpoint
   }
-  dependsOn:[appServicePlan, monitoring,openAIService]
+  dependsOn:[appServicePlanLinux, monitoring,openAIService]
 }
+
+module appServicePlanWindows 'core/host/app-service.bicep' = {
+  name: 'appServicePlanWindows'
+  scope: resourceGroup
+  params: {
+    location:location
+    name:  'asp-win-${projectName}-${environmentName}-${resourceToken}'
+    linuxMachine: false
+  }
+}
+
 
 module apiWebApp 'app/api-web-app.bicep' = {
   name: 'apiWebApp'
   scope: resourceGroup
   params: {
-    appServicePlanName: appServicePlan.outputs.appServicePlanName
-    appServiceNameAPI: 'api-${projectName}-${environmentName}-${resourceToken}'
+    appServicePlanName: appServicePlanWindows.outputs.appServicePlanName
+    appServiceNameAPI: apiAppName
     location: location
     logAnalyticsWorkspaceName: monitoring.outputs.logAnalyticsWorkspaceName
     appInsightsName: monitoring.outputs.applicationInsightsName
@@ -133,10 +148,10 @@ module apiWebApp 'app/api-web-app.bicep' = {
     identityName: managedIdentity.outputs.managedIdentityName
     AZURE_AI_SEARCH_ENDPOINT: search.outputs.endpoint
   }
-  dependsOn:[appServicePlan, monitoring,openAIService]
+  dependsOn:[appServicePlanWindows, monitoring,openAIService]
 }
 
 
 output resourceGroupName string = resourceGroup.name
 output functionAppName string = loaderFunction.outputs.functionAppName
-output apiAppName string = apiWebApp.name
+output apiAppName string = apiAppName

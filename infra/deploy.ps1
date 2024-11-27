@@ -38,6 +38,7 @@ Start-Sleep -Seconds 80
 $deploymentOutputJson = $deploymentOutput | ConvertFrom-Json
 $resourceGroupName = $deploymentOutputJson.resourceGroupName.value
 $functionAppName = $deploymentOutputJson.functionAppName.value
+$apiAppName = $deploymentOutputJson.apiAppName.value
 
 Set-Location -Path .\scripts
 
@@ -48,6 +49,15 @@ Write-Output "Deploying Function Application from scripts"
 Write-Output "If timeout occurs, rerun the following command from scripts:"
 Write-Output ".\deploy_functionapp.ps1 -functionAppName $functionAppName -resourceGroupName $resourceGroupName"
 & .\deploy_functionapp.ps1 -functionAppName $functionAppName -resourceGroupName $resourceGroupName
+
+
+# Deploy ChatAPI
+Write-Output "*****************************************"
+Write-Output "Deploying Chat API from scripts"
+Write-Output "If timeout occurs, rerun the following command from scripts:"
+Write-Output ".\deploy_api.ps1 -apiAppName $apiAppName -resourceGroupName $resourceGroupName"
+& .\deploy_api.ps1 -apiAppName $apiAppName -resourceGroupName $resourceGroupName
+
 
 Set-Location -Path ..
 

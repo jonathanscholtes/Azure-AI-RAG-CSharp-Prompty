@@ -42,7 +42,7 @@ namespace ChatAPI.Data
                     }
                 },
                 Size = 3, // Limit results to 3 documents
-                Select = { "id", "title", "content", "url" }, // Fields to retrieve from the documents
+                Select = { "reference_code", "title", "content" }, // Fields to retrieve from the documents
                 QueryType = SearchQueryType.Semantic, // Enable semantic search
                 SemanticSearch = new SemanticSearchOptions
                 {
@@ -61,10 +61,9 @@ namespace ChatAPI.Data
             {
                 docs.Add(new Dictionary<string, string?>
                 {
-                    { "id", doc.Document["id"]?.ToString() },
+                    { "reference_code", doc.Document["reference_code"]?.ToString() },
                     { "title", doc.Document["title"]?.ToString() },
-                    { "content", doc.Document["content"]?.ToString() },
-                    { "url", doc.Document["url"]?.ToString() }
+                    { "content", doc.Document["content"]?.ToString() }
                 });
             }
 
