@@ -3,34 +3,46 @@
 > Updates and modifications are being made frequently, which may impact stability or functionality. This notice will be removed once development is complete and the project reaches a stable release.
 
 
-# Robust GenAI Chat Solution with .NET, Semantic Kernel, Python, and and Prompty  
+# GenAI Chat Solution with .NET, Semantic Kernel, Python, and Prompty  
 
-## Overview
+## Overview  
 
-This project provides a guide to operationalizing a Generative AI (GenAI) solution on Azure using a Retrieval-Augmented Generation (RAG) architecture. It leverages Azure components like Azure AI Search for vector storage, Azure OpenAI for model inference, and integrates a .NET for API. Built with a focus on security, scalability, and user experience, this solution follows best practices for deploying RAG workflows on Azure.
+This repository provides a guide to operationalizing a Generative AI (GenAI) solution on Azure using a Retrieval-Augmented Generation (RAG) architecture. It leverages Azure services such as Azure AI Search for vector storage and Azure OpenAI for model inference, with a .NET-based API backend. The solution is designed with a focus on security, scalability, and optimal user experience, adhering to best practices for deploying RAG workflows on Azure.
 
+## Key Features  
 
-## Key Features
-
-- **RAG Architecture**: Implements a Retrieval-Augmented Generation workflow, enhancing GenAI capabilities with a vectorized retrieval layer for contextually relevant responses.
-- **Azure  AI Search Vector Store**: Utilizes Azure AI Search for scalable and efficient storage of embeddings, supporting fast and reliable retrieval of data relevant to user queries.
-- **Azure Cosmos DB Document Store**: Utilize Azure Cosmos DB to store and provide additional contect to the GenAI Chat application.
-- **Azure OpenAI**: Integrates OpenAI models to enable high-quality generative responses and insights.
-     - Implements the LangChain with Azure OpenAI Server.
-
-- **.Net Backend**: Manages server-side processing, API orchestration, and integration with Azure services.
-- **Event Driven Document Processing**: Use Azure Functions to create vector embeddings in Azure Cosmos DB for MongoDB VCore, triggered by document uploads.
-- **Infrastructure as Code**: Uses Bicep and Azure CLI to deploy, manage, and scale resources consistently and securely across environments.
-
-## Architecture
-![diagram](./images/design1.png)
-
-The architecture of this project includes:
+- **RAG Architecture**: Implements a Retrieval-Augmented Generation workflow, combining generative AI with vectorized retrieval for contextually enriched responses.  
+- **Azure AI Search Vector Store**: Leverages Azure AI Search for efficient embedding storage, enabling fast retrieval of relevant data to enhance responses.  
+- **Azure Cosmos DB Document Store**: Utilizes Azure Cosmos DB to store documents and provide additional context for the GenAI chat application.  
+- **Azure OpenAI Integration**: Incorporates OpenAI models for generating high-quality responses and insights.  
+- **LangChain Integration**: Utilizes LangChain with Azure OpenAI to streamline and optimize AI-driven interactions.  
+- **Prompty Integration**: Enhances prompt engineering for dynamic and adaptive AI behavior, improving user query handling.  
+- **Semantic Kernel Integration**: Employs Semantic Kernel to orchestrate workflows, ensuring efficient, context-aware AI responses.  
+- **.NET Backend**: Handles API orchestration and server-side processing, seamlessly integrating Azure services.  
+- **Event-Driven Document Processing**: Uses Azure Functions to create vector embeddings in Azure Cosmos DB for MongoDB VCore, triggered by document uploads.  
+- **Infrastructure as Code (IaC)**: Deploys resources using Bicep and Azure CLI to ensure consistent, scalable, and secure infrastructure management.  
 
 
-- **Backend**: The backend is implemented in .Net, utilizing controller-based API for efficient handling of AI logic and data processing. Azure Functions are employed to manage event-driven functions, allowing for scalable and responsive execution as user interactions occur.
-- **Database**: Azure Cosmos DB serves as the database solution, with Azure AI Search optimized for vector search capabilities. This enables fast and efficient retrieval of data, facilitating the application's AI functionalities.
-- **AI Models**: The project incorporates the Azure OpenAI Service, which provides advanced generative text and embedding models. These models enhance the application’s ability to produce high-quality, contextually relevant responses based on user input.
+
+
+## Architecture  
+
+![System Architecture Diagram](./images/design1.png)  
+
+### Components Overview  
+
+- **Backend**:  
+  - Built with .NET, using a controller-based API for efficient AI logic handling and data processing.  
+  - Azure Functions manage event-driven tasks for scalable, responsive execution.  
+
+- **Database**:  
+  - Azure Cosmos DB serves as the primary database, supporting document storage and context enrichment.  
+  - Azure AI Search provides vector search capabilities, ensuring fast and relevant data retrieval.  
+
+- **AI Models**:  
+  - Powered by Azure OpenAI Service, featuring advanced generative text and embedding models.  
+  - Enhances user interactions with high-quality, context-aware responses based on input queries.  
+
 
 ## Requirements
 - Azure subscription for deploying Azure GenAI RAG Application.
@@ -75,47 +87,33 @@ Upload the HTML files from the [documents](documents) directory to the **load** 
 
 ![storage network](./media/storage_container_load.png)
 
-### 4. Validate Embedding Load in Azure CosmosDB for MongoDB vCore
-To verify the successful loading of the documents, use [MongoDB Compass](https://www.mongodb.com/products/tools/compass) or a similar tool.
+### 4. Validate Embedding Load in Azure AI Search
+The Loader Azure Function will trigger and upload the index as the documents are added to the Azure Storage Account. We can view the index and number of documents in the index from our Azure AI Search Service.
 
-##### Configure Azure CosmosDB for MongoDB vCore Access:
-To Validate with [MongoDB Compass](https://www.mongodb.com/products/tools/compass) you will need to add your client IP address to Azure CosmosDB for MongoDB vCore firewall settings.
+##### Grant Access to Query Index From Portal
+If you received an error attempting to query the index from the portal you will need to set the API Access control to **both**.
+![api_access_control](./media/azure_ai_search_api_access_control.png)
 
-- Log in to the Azure portal.
-- Navigate to your Azure CosmosDB for MongoDB vCore.
-- Under the **Networking** section, locate the **Public access** settings.
-- Add your current client IP address to the list of allowed addresses.
 
-##### Connect with MongoDB Compass:
+##### Validate Index Creation
+You can quickly verify that you have the index **azure-support** with the indexed documents by viewing *indexes*. 
 
-Retreive connection string for Azure CosmosDB:
-- Log in to the Azure portal.
-- Navigate to your Azure CosmosDB for MongoDB vCore.
-- Under the **Settings** section, select **Connections strings**
-- Copy connection string for new connection with MongoDB Compass
+![indexes](./media/azure_ai_search_indexes.png)
 
-Once connected you will see that 120 documents loaded into Azure CosmosDB for MongoDB vCore:
-![compass](./images/mongodb_compass.png)
+
 
 
 ### 6. Validate GenAI Application
 
-Access the Azure Web App hosting the React user interface (default name: web-vector-search-) by navigating to its assigned domain. Once the application loads, test its functionality by submitting the default question, "What is supersonic combustion?"
+Access the Azure Web App hosting the API (/swagger) by navigating to its assigned domain. Once the application loads, test its functionality by submitting the default question, "unable to connect to blob storage" for customer 5.
+
+![chatapi_swagger](./media/chatapi_swagger.png)
 
 Upon submission, you should see the following results displayed:
 
-- **Generated Response**: A detailed explanation or summary generated by the AI, outlining the principles of supersonic combustion.
-- **Relevant Documents**: A list of contextually relevant documents retrieved from the Cosmos DB vector store, each contributing to the AI's response.
-
- This initial query confirms that the application is successfully retrieving, processing, and displaying data as designed, allowing you to explore additional questions or further customize the solution.
-
-![results1](./images/react_web_results1.png)
-
-Selecting the returned document pages will display the page images from the Azure Storage Account:
-
-![results1](./images/react_web_results2.png)
-
-
+```json
+{"answer":"Hi there!\n\nI\u0027m sorry to hear you\u0027re having trouble accessing your Azure Blob Storage. Let\u0027s see if we can fix that. \uD83D\uDE0A\n\nHere are a few steps you can take to troubleshoot the \u0022Access Denied\u0022 issue:\n\n1. **Check Permissions**: Ensure that the user or application trying to access the Blob Storage has the necessary permissions (read, write, or delete).\n\n2. **SAS Token**: Make sure the Shared Access Signature (SAS) token you\u0027re using is valid and hasn\u0027t expired. If it has, generate a new one.\n\n3. **Authentication Credentials**: Double-check that the account name and account key are correctly entered. Ensure there are no typos.\n\n4. **Azure Active Directory (AAD)**: If you\u0027re using AAD, confirm that the user or application has the appropriate roles and permissions assigned.\n\n5. **Firewall and Virtual Network Settings**: Verify that the required IP addresses or ranges are allowed to access the Blob Storage.\n\nIf you follow these steps and the issue persists, it might be a good idea to reach out to Azure support for more specific guidance.\n\nReference Code: AZBLOB5\n\nFeel free to ask if you have any more questions.\n\nBest,\n[Your Name]","context":[{"reference_code":"AZBLOB5","title":"Azure Blob Storage Access Denied","content":"Title: Azure Blob Storage Access Denied\nMain Heading: Azure Blob Storage Access Denied\n\nDescription:\nAccessing Azure Blob Storage may fail due to incorrect permissions, invalid SAS tokens, or missing authentication credentials. This can result in an \u0022Access Denied\u0022 error message. Resolving this issue involves ensuring that the user or application has appropriate access rights to the Blob Storage account. It is important to check the permissions, SAS tokens, and authentication credentials to ensure they are correctly configured.\nIf the above resolution steps do not resolve the issue, consider reaching out to Azure support for further assistance. They can provide more specific guidance based on your specific scenario and help troubleshoot any underlying issues.\nAZBLOB5\n\nPossible Error Messages:\n\u0022Access Denied\u0022\n\u0022Permission Denied\u0022\n\u0022Invalid SAS Token\u0022\n\u0022Authentication Failed\u0022\nVerify the permissions assigned to the user or application accessing the Blob Storage. Ensure that the necessary permissions are granted, such as read, write, or delete access.\nCheck the SAS token used for authentication. Make sure it is valid and has not expired. Generate a new SAS token if needed.\nEnsure that the authentication credentials, such as the account name and account key, are correctly entered. Double-check for any typos or mistakes.\nIf using Azure Active Directory (AAD) authentication, verify that the user or application has the necessary permissions and roles assigned in AAD.\nIf the issue persists, check the firewall and virtual network settings for the Blob Storage account. Ensure that the necessary IP addresses or ranges are allowed to access the storage.\n\nResolution Steps:\nVerify the permissions assigned to the user or application accessing the Blob Storage. Ensure that the necessary permissions are granted, such as read, write, or delete access.\nCheck the SAS token used for authentication. Make sure it is valid and has not expired. Generate a new SAS token if needed.\nEnsure that the authentication credentials, such as the account name and account key, are correctly entered. Double-check for any typos or mistakes.\nIf using Azure Active Directory (AAD) authentication, verify that the user or application has the necessary permissions and roles assigned in AAD.\nIf the issue persists, check the firewall and virtual network settings for the Blob Storage account. Ensure that the necessary IP addresses or ranges are allowed to access the storage.\n\nNext Steps:\nIf the above resolution steps do not resolve the issue, consider reaching out to Azure support for further assistance. They can provide more specific guidance based on your specific scenario and help troubleshoot any underlying issues.\nAZBLOB5\n\nReference Code: AZBLOB5\n"}]}
+```
 
 ## Clean-Up
 
@@ -123,7 +121,7 @@ After completing testing, ensure to delete any unused Azure resources or remove 
 
 ### Resource Purge for Redeployment
 
-If you plan to delete and redeploy this solution, you may need to manually purge specific Azure resources, including **Azure API Management (APIM)** and **Azure OpenAI** services, as they may retain certain configurations even after deletion.
+If you plan to delete and redeploy this solution, you may need to manually purge **Azure OpenAI**.
 
 #### Azure OpenAI Purge
 
@@ -138,19 +136,13 @@ To permanently delete an Azure OpenAI or other Azure AI service, follow [these s
 3. **Purge the Resource**:  
    Click **Purge** to permanently delete the selected resource(s). Be aware that purging is irreversible and removes all associated configurations and data for the resource.
 
-#### APIM Purge
 
-To manually delete an Azure API Management (APIM) service, use the following command, substituting your **Subscription ID**, **Region**, and **APIM Resource Name**:
-
-```bash
-az rest --method delete --url https://management.azure.com/subscriptions/[Subscription ID]/providers/Microsoft.ApiManagement/locations/[Region]/deletedservices/[APIM Resource Name]?api-version=2021-08-01
-```
 
 ## License
 This project is licensed under the [MIT License](MIT.md), granting permission for commercial and non-commercial use with proper attribution.
 
 ## Support
-For any questions or issues, please [open an issue](https://github.com/jonathanscholtes/Azure-AI-RAG-Architecture-React-FastAPI-and-Cosmos-DB-Vector-Store/issues) on GitHub or reach out to the project maintainers.
+For any questions or issues, please [open an issue](https://github.com/jonathanscholtes/Azure-AI-RAG-CSharp-Prompty/issues) on GitHub or reach out to the project maintainers.
 
 ## Disclaimer
 This demo application is intended solely for educational and demonstration purposes. It is provided "as-is" without any warranties, and users assume all responsibility for its use.
