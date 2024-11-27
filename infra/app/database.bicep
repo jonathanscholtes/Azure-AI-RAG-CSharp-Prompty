@@ -37,7 +37,18 @@ var containers = [
   partitionKeyPaths: [
     '/id' // Partition on the customer identifier
   ]
-  
+  indexingPolicy: {
+    automatic: true
+    indexingMode: 'consistent'
+    includedPaths: [
+      {
+        path: '/*'
+      }
+    ]
+  }
+  vectorEmbeddingPolicy: {
+    vectorEmbeddings: []
+  }
 }
   {
     name: 'cachecontainer' // Container for chat sessions and messages

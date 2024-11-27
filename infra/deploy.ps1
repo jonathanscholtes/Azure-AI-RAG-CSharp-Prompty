@@ -20,6 +20,7 @@ az config set core.login_experience_v2=off
 az login 
 az account set --subscription $Subscription
 
+
 # Start the deployment
 $deploymentOutput = az deployment sub create `
     --name $deploymentName `
@@ -31,5 +32,23 @@ $deploymentOutput = az deployment sub create `
         location=$Location `
     --query "properties.outputs"
 
+Start-Sleep -Seconds 80
+
+# Parse the deployment output to get app names and resource group
+$deploymentOutputJson = $deploymentOutput | ConvertFrom-Json
+$resourceGroupName = $deploymentOutputJson.resourceGroupName.value
+$functionAppName = $deploymentOutputJson.functionAppName.value
+
+Set-Location -Path .\scripts
+
+
+# Deploy Function Application
+Write-Output "*****************************************"
+Write-Output "Deploying Function Application from scripts"
+Write-Output "If timeout occurs, rerun the following command from scripts:"
+Write-Output ".\deploy_functionapp.ps1 -functionAppName $functionAppName -resourceGroupName $resourceGroupName"
+& .\deploy_functionapp.ps1 -functionAppName $functionAppName -resourceGroupName $resourceGroupName
+
+Set-Location -Path ..
 
 Write-Output "Deployment Complete"

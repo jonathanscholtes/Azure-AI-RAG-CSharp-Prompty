@@ -17,21 +17,24 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddSingleton(serviceProvider => new CosmosClient(builder.Configuration["CosmosDb:ConnectionString"]));
+builder.Services.AddSingleton(serviceProvider => new CosmosClient(builder.Configuration["CosmosDb_ConnectionString"]));
 
-builder.Services.AddSingleton(serviceProvider => new OpenAIClient(new Uri(builder.Configuration["OpenAi:endpoint"]!), new AzureKeyCredential(builder.Configuration["OpenAi:Key"]!)));
+
+
+//new AzureKeyCredential(builder.Configuration["OpenAi:Key"]!)
+builder.Services.AddSingleton(serviceProvider => new OpenAIClient(new Uri(builder.Configuration["AZURE_OPENAI_ENDPOINT"]!), new DefaultAzureCredential()));
 builder.Services.AddKernel();
-builder.Services.AddAzureOpenAIChatCompletion(builder.Configuration["OpenAi:deployment"]!);
-builder.Services.AddAzureOpenAITextEmbeddingGeneration(builder.Configuration["OpenAi:embedding_deployment"]!);
+builder.Services.AddAzureOpenAIChatCompletion(builder.Configuration["AZURE_OPENAI_DEPLOYMENT"]!);
+builder.Services.AddAzureOpenAITextEmbeddingGeneration(builder.Configuration["AZURE_OPENAI_EMBEDDING"]!);
 
 builder.Services.AddSingleton(serviceProvider => new SearchClient(
-    new Uri(builder.Configuration["AzureAISearch:Endpoint"]!),
-    builder.Configuration["AzureAISearch:index_name"],
-    new AzureKeyCredential(builder.Configuration["AzureAISearch:Key"]!)));
+    new Uri(builder.Configuration["AZURE_AI_SEARCH_ENDPOINT"]!),
+    builder.Configuration["AZURE_AI_SEARCH_INDEX"],
+    new DefaultAzureCredential()));
 
 builder.Services.AddSingleton(serviceProvider => new SearchIndexClient(
-    new Uri(builder.Configuration["AzureAISearch:Endpoint"]!),
-    new AzureKeyCredential(builder.Configuration["AzureAISearch:Key"]!)));
+    new Uri(builder.Configuration["AZURE_AI_SEARCH_ENDPOINT"]!),
+    new DefaultAzureCredential()));
 
 builder.Services.AddScoped<CustomerData>();
 builder.Services.AddSingleton<GenerateCustomerInfo>();
@@ -42,7 +45,7 @@ builder.Services.AddScoped<ChatService>();
 //Application Insights
 builder.Services.AddOpenTelemetry().UseAzureMonitor(options =>
 {
-    options.ConnectionString = builder.Configuration["ApplicationInsights:ConnectionString"];
+    options.ConnectionString = builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"];
     options.Credential = new DefaultAzureCredential();
 });
 

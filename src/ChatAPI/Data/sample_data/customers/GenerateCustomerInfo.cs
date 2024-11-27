@@ -28,8 +28,8 @@ public sealed class GenerateCustomerInfo(ILogger<GenerateCustomerInfo> logger, I
 {
     private readonly ILogger<GenerateCustomerInfo> _logger = logger;
     private readonly CosmosClient _cosmosClient = cosmosClient;
-    private readonly string _databaseName = config["CosmosDb:databaseName"]!;
-    private readonly string _containerName = config["CosmosDb:containerName"]!;
+    private readonly string _databaseName = config["CosmosDb_Database"]!;
+    private readonly string _containerName = config["CosmosDb_CustomerContainer"]!;
 
     public async Task PopulateCosmosAsync()
     {

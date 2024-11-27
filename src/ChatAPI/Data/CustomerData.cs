@@ -6,8 +6,8 @@ public sealed class CustomerData(CosmosClient cosmosClient, ILogger<CustomerData
 {
     private readonly CosmosClient _cosmosClient = cosmosClient;
     private readonly ILogger<CustomerData> logger = logger;
-    private readonly string _databaseName = config["CosmosDb:databaseName"]!;
-    private readonly string _containerName = config["CosmosDb:containerName"]!;
+    private readonly string _databaseName = config["CosmosDb_Database"]!;
+    private readonly string _containerName = config["CosmosDb_CustomerContainer"]!;
 
     public async Task<Dictionary<string, object>> GetCustomerAsync(string customerId)
     {

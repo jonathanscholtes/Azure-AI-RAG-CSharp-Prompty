@@ -40,6 +40,7 @@ module storage 'core/storage/blob-storage-account.bicep' = {
   params: {
     accountName: 'sa${projectName}${environmentName}'
     location: location
+    identityName: managedIdentity.outputs.managedIdentityName
   }
   dependsOn:[managedIdentity]
 }
@@ -64,6 +65,7 @@ module search 'core/search/search-services.bicep' = {
     location: location
     semanticSearch: 'standard'
     disableLocalAuth: true
+    identityName: managedIdentity.outputs.managedIdentityName
   }
   dependsOn:[storage]
 }
@@ -91,4 +93,50 @@ module monitoring 'core/monitor/monitoring.bicep' = {
 }
 
 
+module appServicePlan 'core/host/app-service.bicep' = {
+  name: 'appServicePlan'
+  scope: resourceGroup
+  params: {
+    location:location
+    name:  'asp-${projectName}-${environmentName}-${resourceToken}'
+  }
+}
 
+module loaderFunction 'app/loader-function.bicep' = {
+  name: 'loaderFunction'
+  scope: resourceGroup
+  params: {
+    appServicePlanName: appServicePlan.outputs.appServicePlanName
+    functionAppName: 'func-loader-${resourceToken}'
+    location: location
+    StorageBlobURL:storage.outputs.storageBlobURL
+    StorageAccountName: storage.outputs.StorageAccountName
+    logAnalyticsWorkspaceName: monitoring.outputs.logAnalyticsWorkspaceName
+    appInsightsName: monitoring.outputs.applicationInsightsName
+    OpenAIEndPoint: openAIService.outputs.endpoint
+    identityName: managedIdentity.outputs.managedIdentityName
+    AZURE_AI_SEARCH_ENDPOINT: search.outputs.endpoint
+  }
+  dependsOn:[appServicePlan, monitoring,openAIService]
+}
+
+module apiWebApp 'app/api-web-app.bicep' = {
+  name: 'apiWebApp'
+  scope: resourceGroup
+  params: {
+    appServicePlanName: appServicePlan.outputs.appServicePlanName
+    appServiceNameAPI: 'api-${projectName}-${environmentName}-${resourceToken}'
+    location: location
+    logAnalyticsWorkspaceName: monitoring.outputs.logAnalyticsWorkspaceName
+    appInsightsName: monitoring.outputs.applicationInsightsName
+    OpenAIEndPoint: openAIService.outputs.endpoint
+    identityName: managedIdentity.outputs.managedIdentityName
+    AZURE_AI_SEARCH_ENDPOINT: search.outputs.endpoint
+  }
+  dependsOn:[appServicePlan, monitoring,openAIService]
+}
+
+
+output resourceGroupName string = resourceGroup.name
+output functionAppName string = loaderFunction.outputs.functionAppName
+output apiAppName string = apiWebApp.name
