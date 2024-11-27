@@ -14,9 +14,11 @@ var containers = [
     partitionKeyPaths: [
       '/sessionId' // Partition on the session identifier
     ]
+    ttlValue : 86400
     indexingPolicy: {
       automatic: true
       indexingMode: 'consistent'
+      
       includedPaths: [
         {
           path: '/sessionId/?'
@@ -37,6 +39,7 @@ var containers = [
   partitionKeyPaths: [
     '/id' // Partition on the customer identifier
   ]
+  ttlValue : 0
   indexingPolicy: {
     automatic: true
     indexingMode: 'consistent'
@@ -55,6 +58,7 @@ var containers = [
     partitionKeyPaths: [
       '/id' // Partition on the session identifier
     ]
+    ttlValue : 0
     indexingPolicy: {
       automatic: true
       indexingMode: 'consistent'
@@ -122,6 +126,7 @@ module cosmosDbContainers '../core/database/cosmos-db/nosql/container.bicep' = [
       partitionKeyPaths: container.partitionKeyPaths
       indexingPolicy: container.indexingPolicy
       vectorEmbeddingPolicy: container.vectorEmbeddingPolicy
+      ttlValue: container.ttlValue
     }
     dependsOn: [cosmosDbDatabase]
   }

@@ -29,6 +29,8 @@ param indexingPolicy object = {}
 @description('Optional vector embedding policy for the container.')
 param vectorEmbeddingPolicy object = {}
 
+param ttlValue int = 0
+
 var options = setThroughput
   ? autoscale
       ? {
@@ -64,6 +66,10 @@ resource container 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/container
           kind: 'Hash'
         }
       },
+      !(ttlValue==0)
+      ?{
+        defaultTtl:ttlValue
+      }:{},
       !empty(indexingPolicy)
         ? {
             indexingPolicy: indexingPolicy

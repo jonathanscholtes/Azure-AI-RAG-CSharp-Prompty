@@ -6,11 +6,13 @@ using System.Text.Json;
 namespace ChatAPI.Services;
 
 #pragma warning disable SKEXP0001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-public sealed class ChatService(Kernel kernel, ITextEmbeddingGenerationService embedding, CustomerData customerData, AISearchData aiSearch, ILogger<ChatService> logger)
+public sealed class ChatService(Kernel kernel, ITextEmbeddingGenerationService embedding, CustomerData customerData, ChatHistoryData chatHistoryData, AISearchData aiSearch, ILogger<ChatService> logger)
 {
     private readonly CustomerData _customerData = customerData;
     private readonly AISearchData _aiSearch = aiSearch;
     private readonly ILogger<ChatService> _logger = logger;
+
+    private readonly ChatHistoryData _chatHistoryData = chatHistoryData;
 
     private readonly Kernel _kernel = kernel;
     private readonly ITextEmbeddingGenerationService _embedding = embedding;
@@ -38,6 +40,12 @@ public sealed class ChatService(Kernel kernel, ITextEmbeddingGenerationService e
 
 
         _logger.LogInformation("Answer: {Answer}", answer);
+
+        // Save the chat interaction to Cosmos DB
+        await _chatHistoryData.SaveChatAsync(customerId, question, answer);
+
+        _logger.LogInformation("Chat interaction saved for customerId: {CustomerId}", customerId);
+
 
         return JsonSerializer.Serialize(new { answer, context });
     }

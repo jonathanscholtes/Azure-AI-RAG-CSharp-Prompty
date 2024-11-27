@@ -37,6 +37,7 @@ builder.Services.AddSingleton(serviceProvider => new SearchIndexClient(
     new DefaultAzureCredential()));
 
 builder.Services.AddScoped<CustomerData>();
+builder.Services.AddScoped<ChatHistoryData>();
 builder.Services.AddSingleton<GenerateCustomerInfo>();
 //builder.Services.AddSingleton<GenerateProductInfo>();
 builder.Services.AddScoped<AISearchData>();
