@@ -60,8 +60,8 @@ Follow these steps to set up and deploy the solution:
 Begin by cloning the repository to your local machine using the following command:
 
 ```bash
-git clone https://github.com/jonathanscholtes/Azure-AI-RAG-Architecture-React-FastAPI-and-Cosmos-DB-Vector-Store.git
-cd Azure-AI-RAG-Architecture-React-FastAPI-and-Cosmos-DB-Vector-Store
+git clone https://github.com/jonathanscholtes/Azure-AI-RAG-CSharp-Prompty.git
+cd Azure-AI-RAG-CSharp-Prompty
 ```
 
 ### 2. Deploy the Solution Using Bicep:  
