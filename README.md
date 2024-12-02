@@ -3,7 +3,7 @@
 > Updates and modifications are being made frequently, which may impact stability or functionality. This notice will be removed once development is complete and the project reaches a stable release.
 
 
-# GenAI Chat Solution with .NET, Semantic Kernel, Python, and Prompty  
+# GenAI RAG Chat Solution with .NET, Semantic Kernel, Python, and Prompty  
 
 ## Overview  
 
