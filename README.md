@@ -7,7 +7,9 @@
 
 ## Overview  
 
-This repository provides a guide to operationalizing a Generative AI (GenAI) solution on Azure using a Retrieval-Augmented Generation (RAG) architecture. It leverages Azure services such as Azure AI Search for vector storage and Azure OpenAI for model inference, with a .NET-based API backend. The solution is designed with a focus on security, scalability, and optimal user experience, adhering to best practices for deploying RAG workflows on Azure.
+This repository provides a guide to operationalizing a Generative AI (GenAI) solution on Azure using a Retrieval-Augmented Generation (RAG) architecture. The solution includes a RAG Chat API that leverages customer data, along with technical HTML files, to assist customer support teams in troubleshooting customer issues efficiently. It utilizes Azure services such as Azure AI Search for vector storage and Azure OpenAI for model inference, all supported by a .NET-based API backend.
+
+Designed with a focus on security, scalability, and optimal user experience, this solution follows best practices for deploying RAG workflows on Azure. It ensures seamless integration of data retrieval and generative capabilities, providing robust, context-aware responses to customer queries while maintaining high standards for data privacy and system performance.
 
 ## Key Features  
 
