@@ -41,7 +41,7 @@ resource account 'Microsoft.DocumentDB/databaseAccounts@2023-04-15' = {
           serverVersion: '4.2'
         }
       : {}
-    disableLocalAuth: disableKeyBasedAuth
+    disableLocalAuth: false
     capabilities: union(
       (enableServerless)
         ? [

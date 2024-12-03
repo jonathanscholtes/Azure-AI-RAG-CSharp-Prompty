@@ -22,7 +22,7 @@ module account '../account.bicep' = {
     kind: 'GlobalDocumentDB'
     enableServerless: enableServerless
     enableNoSQLVectorSearch: enableVectorSearch
-    disableKeyBasedAuth: disableKeyBasedAuth
+    disableKeyBasedAuth: false
   }
 }
 

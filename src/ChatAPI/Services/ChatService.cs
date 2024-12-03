@@ -28,9 +28,16 @@ public sealed class ChatService(Kernel kernel, ITextEmbeddingGenerationService e
         var customer = await customerTask;
         var embedding = await embeddingTask;
 
-        var context = await _aiSearch.RetrieveDocumentationAsync(question, embedding);
 
+        // Log embedding in a readable format
+        string embeddingString = JsonSerializer.Serialize(embedding);
+        _logger.LogInformation("Embedding: {Embedding}", embeddingString);
+        
+        var context = await _aiSearch.RetrieveDocumentationAsync(question, embedding);
+       
         _logger.LogInformation("Getting result.");
+        _logger.LogInformation("Customer: {customer}", customer);
+
         string? answer = await _chat.InvokeAsync<string>(_kernel, new()
         {
             { "customer", customer },
