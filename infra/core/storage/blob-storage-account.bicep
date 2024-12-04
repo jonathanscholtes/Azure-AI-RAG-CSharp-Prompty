@@ -30,6 +30,11 @@ resource loadContainer 'Microsoft.Storage/storageAccounts/blobServices/container
   name: 'load'
 }
 
+resource imagesContainer 'Microsoft.Storage/storageAccounts/blobServices/containers@2023-04-01' = {
+  parent: blobServices
+  name: 'images'
+}
+
 resource archiveContainer 'Microsoft.Storage/storageAccounts/blobServices/containers@2023-04-01' = {
   parent: blobServices
   name: 'archive'

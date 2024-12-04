@@ -9,6 +9,7 @@ using Microsoft.Azure.Cosmos;
 using Microsoft.SemanticKernel;
 using Azure;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
@@ -22,7 +23,7 @@ builder.Services.AddSingleton(serviceProvider => new CosmosClient(builder.Config
 
 
 //new AzureKeyCredential(builder.Configuration["OpenAi:Key"]!)
-builder.Services.AddSingleton(serviceProvider => new OpenAIClient(new Uri(builder.Configuration["AZURE_OPENAI_ENDPOINT"]!), new DefaultAzureCredential()));
+builder.Services.AddSingleton(serviceProvider => new AzureOpenAIClient(new Uri(builder.Configuration["AZURE_OPENAI_ENDPOINT"]!), new DefaultAzureCredential()));
 builder.Services.AddKernel();
 builder.Services.AddAzureOpenAIChatCompletion(builder.Configuration["AZURE_OPENAI_DEPLOYMENT"]!);
 builder.Services.AddAzureOpenAITextEmbeddingGeneration(builder.Configuration["AZURE_OPENAI_EMBEDDING"]!);
