@@ -12,30 +12,23 @@ using Microsoft.SemanticKernel.Connectors.OpenAI;
 namespace ChatAPI.Services;
 
 
-
 public sealed class ChatService(Kernel kernel, ITextEmbeddingGenerationService embedding, CustomerData customerData,ChatHistory chatHistory, AISearchData aiSearch, ILogger<ChatService> logger)
 {
     private readonly CustomerData _customerData = customerData;
     private readonly AISearchData _aiSearch = aiSearch;
     private readonly ILogger<ChatService> _logger = logger;
 
-    //private readonly ChatHistoryData _chatHistoryData = chatHistoryData;
-
     private readonly Kernel _kernel = kernel;
     private readonly ITextEmbeddingGenerationService _embedding = embedding;
     //private readonly KernelFunction _chat = kernel.CreateFunctionFromPromptyFile("chat.prompty");
 
-    private readonly KernelFunction _chat = kernel.CreateFunctionFromPromptYaml(File.ReadAllText("chat.yaml"), promptTemplateFactory: new HandlebarsPromptTemplateFactory());
+    //private readonly KernelFunction _chat = kernel.CreateFunctionFromPromptYaml(File.ReadAllText("chat.yaml"), promptTemplateFactory: new HandlebarsPromptTemplateFactory());
 
     private readonly ChatHistory _chatHistory = chatHistory;
 
-    public async Task<string> GetResponseAsync(string customerId, string question)
+    public async Task<string> GetResponseAsync( string question)
     {
-
-
-        //ChatHistory chatHistory = new ChatHistory();
-        //chatHistory.AddSystemMessage("You are a Technical Support Assistant for Cloud Services and Computer Solutions. Your role is to provide brief, clear, and friendly responses to customers' cloud and computer troubleshooting questions and can analyze images. You strive to be helpful, personable, and even add a touch of personality when appropriate—like including emojis. Always include the customer's name in your responses for a personalized touch. Analyze and describe the images.");
-        _chatHistory.AddUserMessage(question);
+         _chatHistory.AddUserMessage(question);
 
         IChatCompletionService chatCompletion = kernel.GetRequiredService<IChatCompletionService>();
         PromptExecutionSettings settings = new() { FunctionChoiceBehavior = Microsoft.SemanticKernel.FunctionChoiceBehavior.Auto(autoInvoke: false) };
@@ -69,11 +62,10 @@ public sealed class ChatService(Kernel kernel, ITextEmbeddingGenerationService e
                 {
                     try
                     {
-                        // Invoking the function
+
                         FunctionResultContent resultContent = await functionCall.InvokeAsync(kernel);
 
-                        // Adding the function result to the chat history                       
-            
+
                         _chatHistory.Add(resultContent.ToChatMessage());
                         
                         _logger.LogInformation("Extracted Content: {Content}",resultContent.Result);
@@ -101,7 +93,6 @@ public sealed class ChatService(Kernel kernel, ITextEmbeddingGenerationService e
                                     [
                                         new ImageContent(await GetImagesAsBytes(path), "image/png"),
                                     ]);
-
                                 }
                                 }
                                 else
@@ -114,10 +105,7 @@ public sealed class ChatService(Kernel kernel, ITextEmbeddingGenerationService e
                     }
                     catch (Exception ex)
                     {
-                        // Adding function exception to the chat history.
                         _chatHistory.Add(new FunctionResultContent(functionCall, ex).ToChatMessage());
-                        // or
-                        //chatHistory.Add(new FunctionResultContent(functionCall, "Error details that the AI model can reason about.").ToChatMessage());
                     }
                 }
             }
@@ -127,70 +115,7 @@ public sealed class ChatService(Kernel kernel, ITextEmbeddingGenerationService e
         _chatHistory.AddAssistantMessage(resp);
 
         return JsonSerializer.Serialize(new { resp });
-
-        /*OpenAIPromptExecutionSettings openAIPromptExecutionSettings = new() 
-        {
-            FunctionChoiceBehavior = FunctionChoiceBehavior.Auto()
-        };
-
-        var response = await chatCompletion.GetChatMessageContentAsync(
-            chatHistory,
-            executionSettings: openAIPromptExecutionSettings,
-            kernel: kernel);
-
-        string resp = string.Join(" ",response.Items);
-        _logger.LogInformation("Response {response}",resp );
-        chatHistory.AddAssistantMessage(resp);
-
-        return JsonSerializer.Serialize(new { resp });
-
-        _logger.LogInformation("CustomerId = {CustomerID}, Question = {Question}", customerId, question);
-
-        var customerTask = _customerData.GetCustomerAsync(customerId);
-        var embeddingTask = _embedding.GenerateEmbeddingAsync(question);
-        await Task.WhenAll(customerTask, embeddingTask);
-        var customer = await customerTask;
-        var embedding = await embeddingTask;
-
-
-        // Log embedding in a readable format
-        string embeddingString = JsonSerializer.Serialize(embedding);
-        _logger.LogInformation("Embedding: {Embedding}", embeddingString);
-        
-        var context = await _aiSearch.RetrieveDocumentationAsync(question, embedding);
-        var imageBase64List = await GetImagesAsBase64Async(["https://sachatapidemo.blob.core.windows.net/images/temp_diagram.png"]);
-        byte[] bytes = System.Convert.FromBase64String(imageBase64List[0]);
-        
-        _logger.LogInformation("Getting result.");
-        _logger.LogInformation("Customer: {customer}", customer);
-
-        var chatHistory = new ChatHistory();
-
-        chatHistory.AddUserMessage(
-        [
-            new ImageContent(bytes, "image/jpeg"),
-        ]);
-
-        _logger.LogInformation("images JSON: {images}", JsonSerializer.Serialize(imageBase64List));
-
-        string? answer = await _chat.InvokeAsync<string>(_kernel, new()
-        {
-            { "customer", customer },
-            { "documentation", context },
-            { "question", question },
-            //{ "images", JsonSerializer.Serialize(imageBase64List) }
-        });
-
-
-        _logger.LogInformation("Answer: {Answer}", answer);
-
-        // Save the chat interaction to Cosmos DB
-        //await _chatHistoryData.SaveChatAsync(customerId, question, answer);
-
-        _logger.LogInformation("Chat interaction saved for customerId: {CustomerId}", customerId);*/
-
-
-        
+ 
     }
 
 

@@ -8,9 +8,9 @@ namespace ChatAPI.Controllers;
 public sealed class ChatController(ILogger<ChatController> logger, ChatService chatService) : ControllerBase
 {
     [HttpPost(Name = "PostChatRequest")]
-    public async Task<string> Post(string customerId, string question)
+    public async Task<string> Post(string question)
     {
-        string result = await chatService.GetResponseAsync(customerId, question);
+        string result = await chatService.GetResponseAsync( question);
         logger.LogInformation("Result: {Result}", result);
         return result;
     }
