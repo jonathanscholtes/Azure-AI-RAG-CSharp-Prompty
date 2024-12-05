@@ -27,7 +27,8 @@ builder.Services.AddSingleton(serviceProvider => new CosmosClient(builder.Config
 //new AzureKeyCredential(builder.Configuration["OpenAi:Key"]!)
 builder.Services.AddSingleton(serviceProvider => new AzureOpenAIClient(new Uri(builder.Configuration["AZURE_OPENAI_ENDPOINT"]!), new DefaultAzureCredential()));
 
-//builder.Services.AddSingleton(serviceProvider => new ChatHistory());
+builder.Services.AddSingleton(serviceProvider => new ChatHistory( systemMessage:@"You are a Technical Support Assistant for Cloud Services and Computer Solutions. Your role is to provide brief, clear, and friendly responses to customers' cloud and computer troubleshooting questions and can analyze images. You strive to be helpful, personable, and even add a touch of personality when appropriate—like including emojis.
+ Always include the customer's name in your responses for a personalized touch."));
 builder.Services.AddKernel().Plugins.AddFromType<CustomerDataPlugin>("customerdata");
 
 builder.Services.AddAzureOpenAIChatCompletion(builder.Configuration["AZURE_OPENAI_DEPLOYMENT"]!);

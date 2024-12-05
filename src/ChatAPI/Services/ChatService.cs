@@ -13,7 +13,7 @@ namespace ChatAPI.Services;
 
 
 
-public sealed class ChatService(Kernel kernel, ITextEmbeddingGenerationService embedding, CustomerData customerData, AISearchData aiSearch, ILogger<ChatService> logger)
+public sealed class ChatService(Kernel kernel, ITextEmbeddingGenerationService embedding, CustomerData customerData,ChatHistory chatHistory, AISearchData aiSearch, ILogger<ChatService> logger)
 {
     private readonly CustomerData _customerData = customerData;
     private readonly AISearchData _aiSearch = aiSearch;
@@ -27,15 +27,15 @@ public sealed class ChatService(Kernel kernel, ITextEmbeddingGenerationService e
 
     private readonly KernelFunction _chat = kernel.CreateFunctionFromPromptYaml(File.ReadAllText("chat.yaml"), promptTemplateFactory: new HandlebarsPromptTemplateFactory());
 
-    
+    private readonly ChatHistory _chatHistory = chatHistory;
 
     public async Task<string> GetResponseAsync(string customerId, string question)
     {
 
 
-        ChatHistory chatHistory = new ChatHistory();
-        chatHistory.AddSystemMessage("You are a Technical Support Assistant for Cloud Services and Computer Solutions. Your role is to provide brief, clear, and friendly responses to customers' cloud and computer troubleshooting questions and can analyze images. You strive to be helpful, personable, and even add a touch of personality when appropriate—like including emojis. Always include the customer's name in your responses for a personalized touch. Analyze and describe the images.");
-        chatHistory.AddUserMessage(question);
+        //ChatHistory chatHistory = new ChatHistory();
+        //chatHistory.AddSystemMessage("You are a Technical Support Assistant for Cloud Services and Computer Solutions. Your role is to provide brief, clear, and friendly responses to customers' cloud and computer troubleshooting questions and can analyze images. You strive to be helpful, personable, and even add a touch of personality when appropriate—like including emojis. Always include the customer's name in your responses for a personalized touch. Analyze and describe the images.");
+        _chatHistory.AddUserMessage(question);
 
         IChatCompletionService chatCompletion = kernel.GetRequiredService<IChatCompletionService>();
         PromptExecutionSettings settings = new() { FunctionChoiceBehavior = Microsoft.SemanticKernel.FunctionChoiceBehavior.Auto(autoInvoke: false) };
@@ -43,7 +43,7 @@ public sealed class ChatService(Kernel kernel, ITextEmbeddingGenerationService e
 
         while (true)
             {
-                result = await chatCompletion.GetChatMessageContentAsync(chatHistory, settings, kernel);
+                result = await chatCompletion.GetChatMessageContentAsync(_chatHistory, settings, kernel);
 
                 // Check if the AI model has generated a response.
                 if (result.Content is not null)
@@ -55,7 +55,7 @@ public sealed class ChatService(Kernel kernel, ITextEmbeddingGenerationService e
                 }
 
                 // Adding AI model response containing chosen functions to chat history as it's required by the models to preserve the context.
-                chatHistory.Add(result); 
+                _chatHistory.Add(result); 
 
                 // Check if the AI model has chosen any function for invocation.
                 IEnumerable<FunctionCallContent> functionCalls = FunctionCallContent.GetFunctionCalls(result);
@@ -74,7 +74,7 @@ public sealed class ChatService(Kernel kernel, ITextEmbeddingGenerationService e
 
                         // Adding the function result to the chat history                       
             
-                        chatHistory.Add(resultContent.ToChatMessage());
+                        _chatHistory.Add(resultContent.ToChatMessage());
                         
                         _logger.LogInformation("Extracted Content: {Content}",resultContent.Result);
                         _logger.LogInformation("Plugin Name: {Plugin}", resultContent.PluginName);
@@ -97,7 +97,7 @@ public sealed class ChatService(Kernel kernel, ITextEmbeddingGenerationService e
                                foreach(string path in paths!)
                                 {
 
-                                    chatHistory.AddUserMessage(
+                                    _chatHistory.AddUserMessage(
                                     [
                                         new ImageContent(await GetImagesAsBytes(path), "image/png"),
                                     ]);
@@ -115,7 +115,7 @@ public sealed class ChatService(Kernel kernel, ITextEmbeddingGenerationService e
                     catch (Exception ex)
                     {
                         // Adding function exception to the chat history.
-                        chatHistory.Add(new FunctionResultContent(functionCall, ex).ToChatMessage());
+                        _chatHistory.Add(new FunctionResultContent(functionCall, ex).ToChatMessage());
                         // or
                         //chatHistory.Add(new FunctionResultContent(functionCall, "Error details that the AI model can reason about.").ToChatMessage());
                     }
@@ -124,7 +124,7 @@ public sealed class ChatService(Kernel kernel, ITextEmbeddingGenerationService e
 
         string resp = string.Join(" ",result.Items);
         _logger.LogInformation("Response {response}",resp );
-        //chatHistory.AddAssistantMessage(resp);
+        _chatHistory.AddAssistantMessage(resp);
 
         return JsonSerializer.Serialize(new { resp });
 
