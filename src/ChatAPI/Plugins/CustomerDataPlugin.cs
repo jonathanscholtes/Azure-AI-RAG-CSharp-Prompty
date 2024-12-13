@@ -38,7 +38,7 @@ public class CustomerDataPlugin
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error retrieving customer data for CustomerId: {CustomerId}", customer_id);
+            _logger.LogInformation(ex, "Error retrieving customer data for CustomerId: {CustomerId}", customer_id);
             throw;
         }
     }
